@@ -44,8 +44,8 @@ def calcSpuarePlace(position1,position2,position3,position4, target):
 class MarkSearch :
 
     ### --- aruco設定 --- ###
-    dict_aruco = aruco.Dictionary_get(aruco.DICT_4X4_50)
-    parameters = aruco.DetectorParameters_create()
+    dict_aruco = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
+    parameters = aruco.DetectorParameters()
     frameMarkers = None
 
     def __init__(self, cameraID):
@@ -55,11 +55,11 @@ class MarkSearch :
         """
         静止画を取得し、所望のマークの座標を取得する
         """
-        ret, frame = self.cap.read()
+        frame = cv2.imread("./images/testImage.jpg")
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 
-        corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, dict_aruco, parameters=parameters)
-
+        corners, ids, rejectedImgPoints = aruco.ArucoDetector(dictionary=dict_aruco,detectorParams=parameters).detectMarkers(gray)
+        print(type(frame))
         frameMarkers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
         cv2.imshow('detect', frameMarkers)
 
@@ -141,8 +141,8 @@ if __name__ == "__main__" :
     import time
 
     ### --- aruco設定 --- ###
-    dict_aruco = aruco.Dictionary_get(aruco.DICT_4X4_50)
-    parameters = aruco.DetectorParameters_create()
+    dict_aruco = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
+    parameters = aruco.DetectorParameters()
 
     ### --- parameter --- ###
     cameraID = 0
